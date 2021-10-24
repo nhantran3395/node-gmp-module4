@@ -1,7 +1,0 @@
-2021-10-24 15:16:29:1629 [32minfo[39m: [32mserver started at http://localhost:3001[39m
-2021-10-24 15:24:55:2455 [32minfo[39m: [32mserver started at http://localhost:3001[39m
-2021-10-24 15:25:47:2547 [32minfo[39m: [32mserver started at http://localhost:3001[39m
-2021-10-24 15:26:02:262 [32minfo[39m: [32mserver started at http://localhost:3001[39m
-2021-10-24 15:26:06:266 [35mhttp[39m: [35mGET /user/1 200 24 - 2.515 ms[39m
-[35m[39m
-2021-10-24 15:26:16:2616 [32minfo[39m: [32mserver started at http://localhost:3001[39m
