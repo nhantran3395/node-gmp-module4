@@ -36,7 +36,7 @@ export const userService = {
     users = [...users, user];
     Logger.debug(users);
   },
-  updateUser(id: string, userData: CreateUserRequestDto) {
+  updateUser(id: string, userData: CreateUserRequestDto): User {
     let user = users.find((user) => user.id === id);
     const { login, password, age } = userData;
 
@@ -47,7 +47,9 @@ export const userService = {
     user.login = login;
     user.password = password;
     user.age = age;
+
     Logger.debug(user);
+    return user;
   },
   deleteUser(id: string) {
     let user = users.find((user) => user.id === id);

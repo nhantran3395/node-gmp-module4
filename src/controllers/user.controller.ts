@@ -71,7 +71,7 @@ export const userController = {
 
     try {
       const user = updateUser(id, userData);
-      res.json();
+      res.json(user);
     } catch (error: any) {
       Logger.error(error.message);
 
