@@ -32,8 +32,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "task1": "nodemon --exec ts-node src/task1/index.ts",
-    "task2": "nodemon --exec ts-node src/task2/index.ts"
+    "dev": "nodemon --exec ts-node src/index.ts"
   },
   "keywords": [],
   "author": "",
