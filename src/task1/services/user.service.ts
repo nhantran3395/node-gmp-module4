@@ -18,7 +18,9 @@ export const userService = {
     return user;
   },
   getUserAutoSuggestion(loginQuery: string, limit: number): User[] {
-    return [];
+    const suggests = users.filter((user) => user.login.includes(loginQuery));
+    const suggestsLimited = suggests.slice(0, limit);
+    return suggestsLimited;
   },
   createUser(userData: CreateUserRequestDto) {
     const { login, password, age } = userData;

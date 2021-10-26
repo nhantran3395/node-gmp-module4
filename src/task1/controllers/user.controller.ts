@@ -3,7 +3,13 @@ import { userService } from "../services";
 import { CreateUserRequestDto } from "../dtos";
 import Logger from "../../common/logger";
 
-const { getUserById, createUser, updateUser, deleteUser } = userService;
+const {
+  getUserById,
+  getUserAutoSuggestion,
+  createUser,
+  updateUser,
+  deleteUser,
+} = userService;
 
 export const userController = {
   getUserById(req: Request<{ id: string }>, res: Response) {
@@ -18,8 +24,20 @@ export const userController = {
       res.status(404).json({ message: error.message });
     }
   },
-  getUserAutoSuggestion(req: Request, res: Response) {
-    res.json({ msg: "get user auto suggestion" });
+  getUserAutoSuggestion(
+    req: Request<{}, {}, {}, { loginQuery: string; limit: number }>,
+    res: Response
+  ) {
+    const { loginQuery, limit } = req.query;
+
+    try {
+      const suggests = getUserAutoSuggestion(loginQuery, limit);
+      Logger.info(suggests);
+      res.json(suggests);
+    } catch (error) {
+      Logger.error(error);
+      res.status(500).json("message: something went wrong");
+    }
   },
   createUser(req: Request<{}, {}, CreateUserRequestDto>, res: Response) {
     const userData = req.body;
