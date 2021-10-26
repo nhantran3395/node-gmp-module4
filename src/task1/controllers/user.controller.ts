@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { userService } from "../services";
 import { CreateUserRequestDto } from "../dtos";
+import { UserNotFound } from "../exceptions";
 import Logger from "../logger";
 
 const {
@@ -21,7 +22,12 @@ export const userController = {
       res.json(user);
     } catch (error: any) {
       Logger.error(error.message);
-      res.status(404).json({ message: error.message });
+
+      if (error instanceof UserNotFound) {
+        return res.status(404).json({ message: error.message });
+      }
+
+      res.status(500).json({ message: "Somethings went wrong" });
     }
   },
   getUserAutoSuggestion(
@@ -36,7 +42,7 @@ export const userController = {
       res.json(suggests);
     } catch (error) {
       Logger.error(error);
-      res.status(500).json("message: something went wrong");
+      res.status(500).json("message: Something went wrong");
     }
   },
   createUser(req: Request<{}, {}, CreateUserRequestDto>, res: Response) {
@@ -48,7 +54,7 @@ export const userController = {
       res.status(201).json({ message: "User created successfully" });
     } catch (error: any) {
       Logger.error(error.message);
-      res.status(400).json({ message: error.message });
+      res.status(500).json({ message: error.message });
     }
   },
   updateUser(
@@ -63,7 +69,7 @@ export const userController = {
       res.json();
     } catch (error: any) {
       Logger.error(error.message);
-      res.status(400).json({ message: error.message });
+      res.status(500).json({ message: error.message });
     }
   },
   deleteUser(req: Request<{ id: string }>, res: Response) {
@@ -72,6 +78,14 @@ export const userController = {
     try {
       deleteUser(id);
       res.json({ message: "User deleted successfully" });
-    } catch (error: any) {}
+    } catch (error: any) {
+      Logger.error(error.message);
+
+      if (error instanceof UserNotFound) {
+        return res.status(404).json({ message: error.message });
+      }
+
+      res.status(500).json({ message: "Something went wrong" });
+    }
   },
 };
