@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(morganMiddleware);
 
 app.get("/", function (req, res) {
-  res.json({ message: "task2 is running" });
+  res.json({ message: "task1 is running" });
 });
 
 app.use("/user", userRouter);
