@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { User } from "../models";
 import { UserNotFound } from "../exceptions";
-import Logger from "../../common/logger";
+import Logger from "../logger";
 import { CreateUserRequestDto } from "../dtos/create-user-request.dto";
 
 let users: User[] = [];

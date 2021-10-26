@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { userService } from "../services";
 import { CreateUserRequestDto } from "../dtos";
-import Logger from "../../common/logger";
+import Logger from "../logger";
 
 const {
   getUserById,

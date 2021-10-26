@@ -1,7 +1,7 @@
 import express from "express";
 import { userRouter } from "./routes";
-import Logger from "../common/logger";
-import { morganMiddleware } from "../common/middlewares";
+import Logger from "./logger";
+import { morganMiddleware } from "./middlewares";
 
 const app = express();
 const port = process.env.APPLICATION_PORT_TASK1 ?? 3001;
