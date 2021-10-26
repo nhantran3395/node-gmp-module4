@@ -6,6 +6,7 @@ import { morganMiddleware } from "../common/middlewares";
 const app = express();
 const port = process.env.APPLICATION_PORT_TASK1 ?? 3001;
 
+app.use(express.json());
 app.use(morganMiddleware);
 
 app.get("/", function (req, res) {

@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { User } from "../models";
 import { UserNotFound } from "../exceptions";
+import Logger from "../../common/logger";
 
 let users: User[] = [];
 
@@ -22,6 +23,7 @@ export const userService = {
     const userId = uuidv4();
     const user = { id: userId, login, password, age, isDeleted: false };
     users = [...users, user];
+    Logger.debug(users);
   },
   updateUser(id: string) {},
   deleteUser(id: string) {},
