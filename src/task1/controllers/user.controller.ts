@@ -3,7 +3,7 @@ import { userService } from "../services";
 import { CreateUserRequestDto } from "../dtos";
 import Logger from "../../common/logger";
 
-const { getUserById, createUser } = userService;
+const { getUserById, createUser, updateUser, deleteUser } = userService;
 
 export const userController = {
   getUserById(req: Request<{ id: string }>, res: Response) {
@@ -22,10 +22,10 @@ export const userController = {
     res.json({ msg: "get user auto suggestion" });
   },
   createUser(req: Request<{}, {}, CreateUserRequestDto>, res: Response) {
-    const { login, password, age } = req.body;
+    const userData = req.body;
 
     try {
-      createUser(login, password, age);
+      createUser(userData);
       Logger.info("Created user ");
       res.status(201).json({ message: "User created successfully" });
     } catch (error: any) {
@@ -33,10 +33,27 @@ export const userController = {
       res.status(400).json({ message: error.message });
     }
   },
-  updateUser(req: Request, res: Response) {
-    res.json({ msg: "update user" });
+  updateUser(
+    req: Request<{ id: string }, {}, CreateUserRequestDto>,
+    res: Response
+  ) {
+    const id = req.params.id;
+    const userData = req.body;
+
+    try {
+      const user = updateUser(id, userData);
+      res.json();
+    } catch (error: any) {
+      Logger.error(error.message);
+      res.status(400).json({ message: error.message });
+    }
   },
-  deleteUser(req: Request, res: Response) {
-    res.json({ msg: "delete user" });
+  deleteUser(req: Request<{ id: string }>, res: Response) {
+    const id = req.params.id;
+
+    try {
+      deleteUser(id);
+      res.json({ message: "User deleted successfully" });
+    } catch (error: any) {}
   },
 };
