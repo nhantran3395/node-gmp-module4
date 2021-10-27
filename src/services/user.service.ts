@@ -6,7 +6,29 @@ import { CreateUserRequestSchema } from "../validations";
 import { CreateUserRequestDto } from "../dtos/create-user-request.dto";
 import Logger from "../logger";
 
-let users: User[] = [];
+let users: User[] = [
+  {
+    id: "a4c758cc-b37e-4b33-836a-1ae0632108d7",
+    login: "francisjackson",
+    password: "dogpound",
+    age: 31,
+    isDeleted: false,
+  },
+  {
+    id: "8b9e13e3-9ae2-4d9f-bd79-53a63ff438fd",
+    login: "samehenry",
+    password: "keksa12",
+    age: 26,
+    isDeleted: false,
+  },
+  {
+    id: "82de10e9-71c9-4654-9cdc-2861181aa175",
+    login: "isabellayoung",
+    password: "bigguy",
+    age: 28,
+    isDeleted: false,
+  },
+];
 
 export const userService = {
   getUserById(id: string): User {
