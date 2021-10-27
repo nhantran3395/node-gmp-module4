@@ -13,7 +13,7 @@ app.get("/", function (req, res) {
   res.json({ message: "task2 is running" });
 });
 
-app.use("/user", userRouter);
+app.use("/users", userRouter);
 
 app.listen(port, () => {
   Logger.info(`server started at http://localhost:${port}`);
