@@ -3,6 +3,7 @@ import { userService } from "../services";
 import { CreateUserRequestDto } from "../dtos";
 import { UserInputInvalid, UserNotFound } from "../exceptions";
 import Logger from "../logger";
+import { API_MESSAGES } from "../shared/messages";
 
 const {
   getUserById,
@@ -27,7 +28,7 @@ export const userController = {
         return res.status(404).json({ message: error.message });
       }
 
-      res.status(500).json({ message: "Somethings went wrong" });
+      res.status(500).json({ message: API_MESSAGES.SERVER_ERROR });
     }
   },
   getUserAutoSuggestion(
@@ -42,7 +43,7 @@ export const userController = {
       res.json(suggests);
     } catch (error) {
       Logger.error(error);
-      res.status(500).json("message: Something went wrong");
+      res.status(500).json({ message: API_MESSAGES.SERVER_ERROR });
     }
   },
   createUser(req: Request<{}, {}, CreateUserRequestDto>, res: Response) {
@@ -51,7 +52,7 @@ export const userController = {
     try {
       createUser(userData);
       Logger.info("Created user ");
-      res.status(201).json({ message: "User created successfully" });
+      res.status(201).json({ message: API_MESSAGES.USER_CREATED_SUCCESS });
     } catch (error: any) {
       Logger.error(error.message);
 
@@ -59,7 +60,7 @@ export const userController = {
         return res.status(400).json({ message: error.message });
       }
 
-      res.status(500).json({ message: "Somethings went wrong" });
+      res.status(500).json({ message: API_MESSAGES.SERVER_ERROR });
     }
   },
   updateUser(
@@ -79,7 +80,7 @@ export const userController = {
         return res.status(400).json({ message: error.message });
       }
 
-      res.status(500).json({ message: "Somethings went wrong" });
+      res.status(500).json({ message: API_MESSAGES.SERVER_ERROR });
     }
   },
   deleteUser(req: Request<{ id: string }>, res: Response) {
@@ -87,7 +88,7 @@ export const userController = {
 
     try {
       deleteUser(id);
-      res.json({ message: "User deleted successfully" });
+      res.json({ message: API_MESSAGES.USER_DELETED_SUCCESS });
     } catch (error: any) {
       Logger.error(error.message);
 
@@ -95,7 +96,7 @@ export const userController = {
         return res.status(404).json({ message: error.message });
       }
 
-      res.status(500).json({ message: "Something went wrong" });
+      res.status(500).json({ message: API_MESSAGES.SERVER_ERROR });
     }
   },
 };
