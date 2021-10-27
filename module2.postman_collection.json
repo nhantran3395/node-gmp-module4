@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "87eb87dc-a097-477f-983c-0fa19e219169",
+		"_postman_id": "f98710b3-5800-4ad1-9738-294157a8e3b1",
 		"name": "Node  JS GMP Module 2",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -11,14 +11,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3002/user/5b64cc7e-0843-4baa-824c-f7f8f37b972b",
+					"raw": "localhost:3002/users/a4c758cc-b37e-4b33-836a-1ae0632108d7",
 					"host": [
 						"localhost"
 					],
 					"port": "3002",
 					"path": [
-						"user",
-						"5b64cc7e-0843-4baa-824c-f7f8f37b972b"
+						"users",
+						"a4c758cc-b37e-4b33-836a-1ae0632108d7"
 					]
 				}
 			},
@@ -30,23 +30,23 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3002/user/autoSuggests?loginQuery=virgil&limit=2",
+					"raw": "localhost:3002/users/autoSuggests?loginQuery=&limit=6",
 					"host": [
 						"localhost"
 					],
 					"port": "3002",
 					"path": [
-						"user",
+						"users",
 						"autoSuggests"
 					],
 					"query": [
 						{
 							"key": "loginQuery",
-							"value": "virgil"
+							"value": ""
 						},
 						{
 							"key": "limit",
-							"value": "2"
+							"value": "6"
 						}
 					]
 				}
@@ -60,7 +60,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"login\":\"virgilphillips\",\r\n    \"password\":\"junebug\",\r\n    \"age\":39\r\n}\r\n",
+					"raw": "{\r\n    \"login\":\"virgilphillips\",\r\n    \"password\":\"junebug\"\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -68,13 +68,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3002/user",
+					"raw": "localhost:3002/users",
 					"host": [
 						"localhost"
 					],
 					"port": "3002",
 					"path": [
-						"user"
+						"users"
 					]
 				}
 			},
@@ -95,13 +95,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3002/user/e7f1be0f-cd56-43f5-a34e-48eed3034f28",
+					"raw": "localhost:3002/users/e7f1be0f-cd56-43f5-a34e-48eed3034f28",
 					"host": [
 						"localhost"
 					],
 					"port": "3002",
 					"path": [
-						"user",
+						"users",
 						"e7f1be0f-cd56-43f5-a34e-48eed3034f28"
 					]
 				}
@@ -114,13 +114,13 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "localhost:3002/user/5b64cc7e-0843-4baa-824c-f7f8f37b972b",
+					"raw": "localhost:3002/users/5b64cc7e-0843-4baa-824c-f7f8f37b972b",
 					"host": [
 						"localhost"
 					],
 					"port": "3002",
 					"path": [
-						"user",
+						"users",
 						"5b64cc7e-0843-4baa-824c-f7f8f37b972b"
 					]
 				}
