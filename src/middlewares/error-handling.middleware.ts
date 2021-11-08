@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { ApiError } from "../exceptions";
 import { API_MESSAGES } from "../shared/messages";
-import Logger from "../logger";
+import { Logger } from "../logger";
 
 const errorHandlingMiddleware = (
   err: Error | ApiError,

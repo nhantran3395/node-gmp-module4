@@ -4,7 +4,7 @@ import { User } from "../models";
 import { UserNotFound, UserInputInvalid } from "../exceptions";
 import { CreateUserRequestSchema } from "../validations";
 import { CreateUserRequestDto } from "../dtos/create-user-request.dto";
-import Logger from "../logger";
+import { Logger } from "../logger";
 
 let users: User[] = [
   {

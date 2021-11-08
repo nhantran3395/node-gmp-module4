@@ -1,6 +1,7 @@
 import express from "express";
+import "./configs/dotenv.config";
 import { userRouter } from "./routes";
-import Logger from "./logger";
+import { Logger } from "./logger";
 import { errorHandlingMiddleware, morganMiddleware } from "./middlewares";
 
 const app = express();

@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { userService } from "../services";
 import { CreateUserRequestDto } from "../dtos";
 import { UserInputInvalid, UserNotFound } from "../exceptions";
-import Logger from "../logger";
+import { Logger } from "../logger";
 import { API_MESSAGES } from "../shared/messages";
 
 const {
