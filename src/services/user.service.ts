@@ -1,5 +1,6 @@
+import { ValidationError } from "sequelize";
 import { User } from "../models";
-import { UserNotFound, UserInputInvalid } from "../exceptions";
+import { UserNotFound, UserInputInvalid, UserDuplicated } from "../exceptions";
 import { CreateUserRequestSchema } from "../validations";
 import { CreateUserRequestDto } from "../dtos/create-user-request.dto";
 import { Logger } from "../logger";
@@ -39,6 +40,11 @@ export const userService = {
     try {
       createdUser = await User.create({ login, password, age });
     } catch (err: any) {
+      // got ValidationError when register with login that already been used (violating unique constraint)
+      if (err instanceof ValidationError) {
+        throw new UserDuplicated();
+      }
+
       throw new Error(err.message);
     }
 
@@ -65,14 +71,16 @@ export const userService = {
   //   Logger.debug(user);
   //   return user;
   // },
-  // deleteUser(id: string) {
-  //   let user = users.find((user) => user.id === id);
+  async deleteUser(id: string) {
+    const user = await User.findOne({ where: { id: id } });
+    if (!user) {
+      throw new UserNotFound(id);
+    }
 
-  //   if (!user) {
-  //     throw new UserNotFound(id);
-  //   }
-
-  //   user.isDeleted = true;
-  //   Logger.debug(user);
-  // },
+    try {
+      User.update({ isDeleted: true }, { where: { id: id } });
+    } catch (err: any) {
+      throw new Error(err.message);
+    }
+  },
 };

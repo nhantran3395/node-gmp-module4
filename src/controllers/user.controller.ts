@@ -9,7 +9,7 @@ const {
   // getUserAutoSuggestion,
   createUser,
   // updateUser,
-  // deleteUser,
+  deleteUser,
 } = userService;
 
 export const userController = {
@@ -73,14 +73,18 @@ export const userController = {
   //     next(error);
   //   }
   // },
-  // deleteUser(req: Request<{ id: string }>, res: Response, next: NextFunction) {
-  //   const id = req.params.id;
+  async deleteUser(
+    req: Request<{ id: string }>,
+    res: Response,
+    next: NextFunction
+  ) {
+    const id = req.params.id;
 
-  //   try {
-  //     deleteUser(id);
-  //     res.json({ message: API_MESSAGES.USER_DELETED_SUCCESS });
-  //   } catch (error: any) {
-  //     next(error);
-  //   }
-  // },
+    try {
+      await deleteUser(id);
+      res.json({ message: API_MESSAGES.USER_DELETED_SUCCESS });
+    } catch (error: any) {
+      next(error);
+    }
+  },
 };
