@@ -66,6 +66,12 @@ export const userService = {
       throw new UserNotFound(id);
     }
 
+    const { error } = CreateUserRequestSchema.validate(userData);
+
+    if (error) {
+      throw new UserInputInvalid(error.message);
+    }
+
     user.login = login;
     user.password = password;
     user.age = age;

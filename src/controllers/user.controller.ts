@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { userService } from "../services";
 import { CreateUserRequestDto } from "../dtos";
 import { UserInputInvalid, UserNotFound } from "../exceptions";
@@ -14,7 +14,7 @@ const {
 } = userService;
 
 export const userController = {
-  getUserById(req: Request<{ id: string }>, res: Response) {
+  getUserById(req: Request<{ id: string }>, res: Response, next: NextFunction) {
     const id = req.params.id;
 
     try {
@@ -22,18 +22,13 @@ export const userController = {
       Logger.info("Retrieved info for user: ", user);
       res.json(user);
     } catch (error: any) {
-      Logger.error(error.message);
-
-      if (error instanceof UserNotFound) {
-        return res.status(404).json({ message: error.message });
-      }
-
-      res.status(500).json({ message: API_MESSAGES.SERVER_ERROR });
+      next(error);
     }
   },
   getUserAutoSuggestion(
     req: Request<{}, {}, {}, { loginQuery: string; limit: number }>,
-    res: Response
+    res: Response,
+    next: NextFunction
   ) {
     const { loginQuery, limit } = req.query;
 
@@ -42,11 +37,14 @@ export const userController = {
       Logger.info(suggests);
       res.json(suggests);
     } catch (error) {
-      Logger.error(error);
-      res.status(500).json({ message: API_MESSAGES.SERVER_ERROR });
+      next(error);
     }
   },
-  createUser(req: Request<{}, {}, CreateUserRequestDto>, res: Response) {
+  createUser(
+    req: Request<{}, {}, CreateUserRequestDto>,
+    res: Response,
+    next: NextFunction
+  ) {
     const userData = req.body;
 
     try {
@@ -54,18 +52,13 @@ export const userController = {
       Logger.info("Created user ");
       res.status(201).json({ message: API_MESSAGES.USER_CREATED_SUCCESS });
     } catch (error: any) {
-      Logger.error(error.message);
-
-      if (error instanceof UserInputInvalid) {
-        return res.status(400).json({ message: error.message });
-      }
-
-      res.status(500).json({ message: API_MESSAGES.SERVER_ERROR });
+      next(error);
     }
   },
   updateUser(
     req: Request<{ id: string }, {}, CreateUserRequestDto>,
-    res: Response
+    res: Response,
+    next: NextFunction
   ) {
     const id = req.params.id;
     const userData = req.body;
@@ -74,29 +67,17 @@ export const userController = {
       const user = updateUser(id, userData);
       res.json(user);
     } catch (error: any) {
-      Logger.error(error.message);
-
-      if (error instanceof UserInputInvalid) {
-        return res.status(400).json({ message: error.message });
-      }
-
-      res.status(500).json({ message: API_MESSAGES.SERVER_ERROR });
+      next(error);
     }
   },
-  deleteUser(req: Request<{ id: string }>, res: Response) {
+  deleteUser(req: Request<{ id: string }>, res: Response, next: NextFunction) {
     const id = req.params.id;
 
     try {
       deleteUser(id);
       res.json({ message: API_MESSAGES.USER_DELETED_SUCCESS });
     } catch (error: any) {
-      Logger.error(error.message);
-
-      if (error instanceof UserNotFound) {
-        return res.status(404).json({ message: error.message });
-      }
-
-      res.status(500).json({ message: API_MESSAGES.SERVER_ERROR });
+      next(error);
     }
   },
 };
