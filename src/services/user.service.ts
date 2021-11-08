@@ -1,4 +1,4 @@
-import { ValidationError } from "sequelize";
+import { UniqueConstraintError } from "sequelize";
 import { User } from "../models";
 import { UserNotFound, UserInputInvalid, UserDuplicated } from "../exceptions";
 import { CreateUserRequestSchema } from "../validations";
@@ -41,8 +41,7 @@ export const userService = {
     try {
       createdUser = await User.create({ login, password, age });
     } catch (err: any) {
-      // got ValidationError when register with login that already been used (violating unique constraint)
-      if (err instanceof ValidationError) {
+      if (err instanceof UniqueConstraintError) {
         throw new UserDuplicated();
       }
 
