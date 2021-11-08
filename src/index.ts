@@ -2,7 +2,11 @@ import express from "express";
 import "./configs/dotenv.config";
 import { userRouter } from "./routes";
 import { Logger } from "./logger";
-import { errorHandlingMiddleware, morganMiddleware } from "./middlewares";
+import {
+  errorHandlingMiddleware,
+  routeNotExistsHandlingMiddleware,
+  morganMiddleware,
+} from "./middlewares";
 
 const app = express();
 const port = process.env.APPLICATION_PORT_TASK1 ?? 3002;
@@ -17,6 +21,8 @@ app.get("/", function (req, res) {
 app.use("/users", userRouter);
 
 app.use(errorHandlingMiddleware);
+
+app.use(routeNotExistsHandlingMiddleware);
 
 app.listen(port, () => {
   Logger.info(`server started on port ${port}`);
