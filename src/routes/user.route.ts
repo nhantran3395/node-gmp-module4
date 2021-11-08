@@ -5,14 +5,14 @@ import { commonController } from "../controllers/common.controller";
 const router = Router();
 const {
   getUserById,
-  // getUserAutoSuggestion,
+  getUserAutoSuggestion,
   createUser,
   updateUser,
   deleteUser,
 } = userController;
 const { handleMethodNotAllowed } = commonController;
 
-// router.get("/autoSuggests", getUserAutoSuggestion);
+router.get("/autoSuggests", getUserAutoSuggestion);
 router.get("/:id", getUserById);
 router.post("/", createUser);
 router.put("/:id", updateUser);

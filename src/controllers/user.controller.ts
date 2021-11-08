@@ -6,7 +6,7 @@ import { API_MESSAGES } from "../shared/messages";
 
 const {
   getUserById,
-  // getUserAutoSuggestion,
+  getUserAutoSuggestion,
   createUser,
   updateUser,
   deleteUser,
@@ -28,21 +28,21 @@ export const userController = {
       next(error);
     }
   },
-  // getUserAutoSuggestion(
-  //   req: Request<{}, {}, {}, { loginQuery: string; limit: number }>,
-  //   res: Response,
-  //   next: NextFunction
-  // ) {
-  //   const { loginQuery, limit } = req.query;
+  async getUserAutoSuggestion(
+    req: Request<{}, {}, {}, { loginQuery: string; limit: number }>,
+    res: Response,
+    next: NextFunction
+  ) {
+    const { loginQuery, limit } = req.query;
 
-  //   try {
-  //     const suggests = getUserAutoSuggestion(loginQuery, limit);
-  //     Logger.info(suggests);
-  //     res.json(suggests);
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // },
+    try {
+      const suggests = await getUserAutoSuggestion(loginQuery, limit);
+      Logger.info(suggests);
+      res.json(suggests);
+    } catch (error) {
+      next(error);
+    }
+  },
   async createUser(
     req: Request<{}, {}, CreateUserRequestDto>,
     res: Response,

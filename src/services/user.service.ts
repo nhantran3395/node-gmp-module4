@@ -1,4 +1,4 @@
-import { UniqueConstraintError } from "sequelize";
+import { UniqueConstraintError, Op } from "sequelize";
 import { User } from "../models";
 import { UserNotFound, UserInputInvalid, UserDuplicated } from "../exceptions";
 import { CreateUserRequestSchema } from "../validations";
@@ -28,11 +28,22 @@ export const userService = {
 
     return user;
   },
-  // getUserAutoSuggestion(loginQuery: string, limit: number): User[] {
-  //   const suggests = users.filter((user) => user.login.includes(loginQuery));
-  //   const suggestsLimited = suggests.slice(0, limit);
-  //   return suggestsLimited;
-  // },
+  async getUserAutoSuggestion(
+    loginQuery: string,
+    limit: number
+  ): Promise<User[]> {
+    let suggestsLimited: User[];
+
+    try {
+      suggestsLimited = await User.findAll({
+        where: { login: { [Op.like]: `%${loginQuery}%` } },
+        limit: limit,
+      });
+    } catch (err: any) {
+      throw new Error(err.message);
+    }
+    return suggestsLimited;
+  },
   async createUser(userData: CreateUserRequestDto): Promise<void> {
     const { error } = CreateUserRequestSchema.validate(userData);
 
