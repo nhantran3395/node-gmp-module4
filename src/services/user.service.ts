@@ -4,10 +4,16 @@ import { UserNotFound, UserInputInvalid, UserDuplicated } from "../exceptions";
 import { CreateUserRequestSchema } from "../validations";
 import { CreateUserRequestDto } from "../dtos/create-user-request.dto";
 import { Logger } from "../logger";
+import { uuidValidator } from "../utils";
 
 export const userService = {
   async getUserById(id: string): Promise<User> {
     Logger.info(`Finding user with id = ${id}`);
+
+    if (!uuidValidator(id)) {
+      throw new UserInputInvalid("id must be in uuid format");
+    }
+
     let user: User | null;
 
     try {
