@@ -7,6 +7,7 @@ import { Logger } from "../logger";
 
 export const userService = {
   async getUserById(id: string): Promise<User> {
+    Logger.info(`Finding user with id = ${id}`);
     let user: User | null;
 
     try {
@@ -72,10 +73,7 @@ export const userService = {
   //   return user;
   // },
   async deleteUser(id: string) {
-    const user = await User.findOne({ where: { id: id } });
-    if (!user) {
-      throw new UserNotFound(id);
-    }
+    await userService.getUserById(id);
 
     try {
       User.update({ isDeleted: true }, { where: { id: id } });
