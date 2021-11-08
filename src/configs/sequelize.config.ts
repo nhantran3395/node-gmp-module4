@@ -15,4 +15,4 @@ const sequelize = new Sequelize(databaseUri, {
   logging: (msg) => Logger.debug(msg),
 });
 
-export { Sequelize, sequelize };
+export { sequelize };
