@@ -51,32 +51,40 @@ export const userService = {
 
     Logger.debug(createdUser);
   },
-  // updateUser(id: string, userData: CreateUserRequestDto): User {
-  //   let user = users.find((user) => user.id === id);
-  //   const { login, password, age } = userData;
+  async updateUser(id: string, userData: CreateUserRequestDto): Promise<User> {
+    Logger.info(`Updating user with id = ${id}`);
+    await userService.getUserById(id);
 
-  //   if (!user) {
-  //     throw new UserNotFound(id);
-  //   }
+    const { error } = CreateUserRequestSchema.validate(userData);
 
-  //   const { error } = CreateUserRequestSchema.validate(userData);
+    if (error) {
+      throw new UserInputInvalid(error.message);
+    }
 
-  //   if (error) {
-  //     throw new UserInputInvalid(error.message);
-  //   }
+    const { login, password, age } = userData;
 
-  //   user.login = login;
-  //   user.password = password;
-  //   user.age = age;
+    try {
+      await User.update(
+        { login, password, age, updatedAt: new Date() },
+        { where: { id: id } }
+      );
+    } catch (err: any) {
+      throw new Error(err.message);
+    }
 
-  //   Logger.debug(user);
-  //   return user;
-  // },
+    // return user after update
+    const updatedUser = userService.getUserById(id);
+    return updatedUser;
+  },
   async deleteUser(id: string) {
+    Logger.info(`Deleting user with id = ${id}`);
     await userService.getUserById(id);
 
     try {
-      User.update({ isDeleted: true }, { where: { id: id } });
+      User.update(
+        { isDeleted: true, updatedAt: new Date() },
+        { where: { id: id } }
+      );
     } catch (err: any) {
       throw new Error(err.message);
     }

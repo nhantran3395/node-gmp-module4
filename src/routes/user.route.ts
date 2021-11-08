@@ -7,7 +7,7 @@ const {
   getUserById,
   // getUserAutoSuggestion,
   createUser,
-  // updateUser,
+  updateUser,
   deleteUser,
 } = userController;
 const { handleMethodNotAllowed } = commonController;
@@ -15,7 +15,7 @@ const { handleMethodNotAllowed } = commonController;
 // router.get("/autoSuggests", getUserAutoSuggestion);
 router.get("/:id", getUserById);
 router.post("/", createUser);
-// router.put("/:id", updateUser);
+router.put("/:id", updateUser);
 router.delete("/:id", deleteUser);
 router.all("/", handleMethodNotAllowed);
 

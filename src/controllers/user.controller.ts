@@ -8,7 +8,7 @@ const {
   getUserById,
   // getUserAutoSuggestion,
   createUser,
-  // updateUser,
+  updateUser,
   deleteUser,
 } = userService;
 
@@ -58,21 +58,22 @@ export const userController = {
       next(error);
     }
   },
-  // updateUser(
-  //   req: Request<{ id: string }, {}, CreateUserRequestDto>,
-  //   res: Response,
-  //   next: NextFunction
-  // ) {
-  //   const id = req.params.id;
-  //   const userData = req.body;
+  async updateUser(
+    req: Request<{ id: string }, {}, CreateUserRequestDto>,
+    res: Response,
+    next: NextFunction
+  ) {
+    const id = req.params.id;
+    const userData = req.body;
 
-  //   try {
-  //     const user = updateUser(id, userData);
-  //     res.json(user);
-  //   } catch (error: any) {
-  //     next(error);
-  //   }
-  // },
+    try {
+      const user = await updateUser(id, userData);
+      Logger.info(`Updated user with id = ${id}`);
+      res.json(user);
+    } catch (error: any) {
+      next(error);
+    }
+  },
   async deleteUser(
     req: Request<{ id: string }>,
     res: Response,
@@ -82,6 +83,7 @@ export const userController = {
 
     try {
       await deleteUser(id);
+      Logger.info(`Deleted user with id = ${id}`);
       res.json({ message: API_MESSAGES.USER_DELETED_SUCCESS });
     } catch (error: any) {
       next(error);
