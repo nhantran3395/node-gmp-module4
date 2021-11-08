@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "f98710b3-5800-4ad1-9738-294157a8e3b1",
-		"name": "Node  JS GMP Module 2",
+		"_postman_id": "97231a51-1a0b-483f-8126-6435d5dd9a65",
+		"name": "Node  JS GMP Module 3",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -60,7 +60,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"login\":\"virgilphillips\",\r\n    \"password\":\"junebug\"\r\n}\r\n",
+					"raw": "{\r\n    \"login\":\"virgilphillips\",\r\n    \"password\":\"junebug\",\r\n    \"age\":26\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -87,7 +87,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"login\":\"virgilphillips\",\r\n    \"password\":\"junebugvirgil\",\r\n    \"age\":39\r\n}",
+					"raw": "{\r\n    \"login\":\"francisjackson123\",\r\n    \"password\":\"dogpound\",\r\n    \"age\":24\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -95,14 +95,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3002/users/e7f1be0f-cd56-43f5-a34e-48eed3034f28",
+					"raw": "localhost:3002/users/a4c758cc-b37e-4b33-836a-1ae0632108d7",
 					"host": [
 						"localhost"
 					],
 					"port": "3002",
 					"path": [
 						"users",
-						"e7f1be0f-cd56-43f5-a34e-48eed3034f28"
+						"a4c758cc-b37e-4b33-836a-1ae0632108d7"
 					]
 				}
 			},
@@ -114,14 +114,14 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "localhost:3002/users/5b64cc7e-0843-4baa-824c-f7f8f37b972b",
+					"raw": "localhost:3002/users/82de10e9-71c9-4654-9cdc-2861181aa175",
 					"host": [
 						"localhost"
 					],
 					"port": "3002",
 					"path": [
 						"users",
-						"5b64cc7e-0843-4baa-824c-f7f8f37b972b"
+						"82de10e9-71c9-4654-9cdc-2861181aa175"
 					]
 				}
 			},
