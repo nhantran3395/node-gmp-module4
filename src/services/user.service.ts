@@ -1,8 +1,8 @@
 import { UniqueConstraintError, Op } from "sequelize";
 import { User } from "../models";
-import { UserNotFound, UserInputInvalid, UserDuplicated } from "../exceptions";
+import { ResourceNotFound, InputInvalid, UserDuplicated } from "../exceptions";
 import { CreateUserRequestSchema } from "../validations";
-import { CreateUserRequestDto } from "../dtos/create-user-request.dto";
+import { CreateUserRequestDto } from "../dtos";
 import { Logger } from "../logger";
 import { uuidValidator } from "../utils";
 
@@ -11,7 +11,7 @@ export const userService = {
     Logger.info(`Finding user with id = ${id}`);
 
     if (!uuidValidator(id)) {
-      throw new UserInputInvalid("id must be in uuid format");
+      throw new InputInvalid("id must be in uuid format");
     }
 
     let user: User | null;
@@ -23,7 +23,7 @@ export const userService = {
     }
 
     if (!user) {
-      throw new UserNotFound(id);
+      throw new ResourceNotFound("User", id);
     }
 
     return user;
@@ -48,7 +48,7 @@ export const userService = {
     const { error } = CreateUserRequestSchema.validate(userData);
 
     if (error) {
-      throw new UserInputInvalid(error.message);
+      throw new InputInvalid(error.message);
     }
 
     const { login, password, age } = userData;
@@ -74,7 +74,7 @@ export const userService = {
     const { error } = CreateUserRequestSchema.validate(userData);
 
     if (error) {
-      throw new UserInputInvalid(error.message);
+      throw new InputInvalid(error.message);
     }
 
     const { login, password, age } = userData;

@@ -1,13 +1,14 @@
 import express, { NextFunction } from "express";
 import "./configs/dotenv.config";
 import { sequelize } from "./configs/sequelize.config";
-import { userRouter } from "./routes";
+import { userRouter, groupRouter } from "./routes";
 import { Logger } from "./logger";
 import {
   errorHandlingMiddleware,
   routeNotExistsHandlingMiddleware,
   morganMiddleware,
 } from "./middlewares";
+import "./models/associations";
 
 const app = express();
 const port = process.env.APPLICATION_PORT ?? 3002;
@@ -29,6 +30,7 @@ app.get("/databaseconnection", async function (req, res, next: NextFunction) {
 });
 
 app.use("/users", userRouter);
+app.use("/groups", groupRouter);
 
 app.use(errorHandlingMiddleware);
 
