@@ -1,6 +1,10 @@
 import { UniqueConstraintError, Op } from "sequelize";
 import { User } from "../models";
-import { ResourceNotFound, InputInvalid, UserDuplicated } from "../exceptions";
+import {
+  ResourceNotFound,
+  InputInvalid,
+  ResourceDuplicated,
+} from "../exceptions";
 import { CreateUserRequestSchema } from "../validations";
 import { CreateUserRequestDto } from "../dtos";
 import { Logger } from "../logger";
@@ -59,7 +63,7 @@ export const userService = {
       createdUser = await User.create({ login, password, age });
     } catch (err: any) {
       if (err instanceof UniqueConstraintError) {
-        throw new UserDuplicated();
+        throw new ResourceDuplicated("User", "login");
       }
 
       throw new Error(err.message);
