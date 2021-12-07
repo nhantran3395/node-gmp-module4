@@ -86,17 +86,22 @@ export const groupService = {
 
     try {
       createdGroup = await Group.create({ name: groupName });
-      const { id: groupId } = createdGroup;
 
-      permissionNames.forEach(async (permissionName) => {
-        const permission = await Permission.findOne({
-          where: { name: permissionName },
-        });
+      const permissions = await Promise.all(
+        permissionNames.map(async (permissionName) => {
+          const permission = await Permission.findOne({
+            where: { name: permissionName },
+          });
 
-        const permissionId = permission?.id;
+          if (!permission) {
+            throw new Error();
+          }
 
-        GroupPermission.create({ permissionId, groupId });
-      });
+          return permission;
+        })
+      );
+
+      createdGroup.addPermissions(permissions);
     } catch (err: any) {
       if (err instanceof UniqueConstraintError) {
         throw new ResourceDuplicated("Group", "name");
@@ -141,7 +146,7 @@ export const groupService = {
       const users = await Promise.all(
         userIds.map(async (userId) => await userService.getUserById(userId))
       );
-      group.addUser(users);
+      group.addUsers(users);
     } catch (err: any) {
       throw new Error(err.message);
     }
