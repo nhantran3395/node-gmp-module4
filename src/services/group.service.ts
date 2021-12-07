@@ -1,5 +1,5 @@
 import { UniqueConstraintError, FindOptions, Transaction } from "sequelize";
-import { Group, Permission, User, GroupPermission } from "../models";
+import { Group, Permission, User, GroupPermission, GroupUser } from "../models";
 import {
   ResourceNotFound,
   InputInvalid,
@@ -8,8 +8,13 @@ import {
 import { Logger } from "../logger";
 import { uuidValidator } from "../utils";
 import { CreateGroupRequestDto } from "../dtos";
-import { CreateGroupRequestSchema } from "../validations";
+import {
+  CreateGroupRequestSchema,
+  AddUsersToGroupSchema,
+} from "../validations";
 import { sequelize } from "../configs/sequelize.config";
+import { AddUsersToGroupDto } from "../dtos/add-users-to-group-request.dto";
+import { userService } from "./user.service";
 
 const findGroupOption: FindOptions = {
   include: [
@@ -113,7 +118,30 @@ export const groupService = {
           where: { groupId: id },
           transaction: transaction,
         });
+        await GroupUser.destroy({
+          where: { groupId: id },
+          transaction: transaction,
+        });
       });
+    } catch (err: any) {
+      throw new Error(err.message);
+    }
+  },
+  async addUsersToGroup(data: AddUsersToGroupDto) {
+    const { error } = AddUsersToGroupSchema.validate(data);
+
+    if (error) {
+      throw new InputInvalid(error.message);
+    }
+
+    const { groupId, userIds } = data;
+    const group = await groupService.getGroupById(groupId);
+
+    try {
+      const users = await Promise.all(
+        userIds.map(async (userId) => await userService.getUserById(userId))
+      );
+      group.addUser(users);
     } catch (err: any) {
       throw new Error(err.message);
     }
