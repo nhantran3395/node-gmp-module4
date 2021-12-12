@@ -12,8 +12,6 @@ import { uuidValidator } from "../utils";
 
 export const userService = {
   async getUserById(id: string): Promise<User> {
-    Logger.info(`Finding user with id = ${id}`);
-
     if (!uuidValidator(id)) {
       throw new InputInvalid("id must be in uuid format");
     }
@@ -22,6 +20,7 @@ export const userService = {
 
     try {
       user = await User.findOne({ where: { id: id } });
+      Logger.info(`Found user with id = ${id}`);
     } catch (err: any) {
       throw new Error(err.message);
     }
@@ -30,6 +29,7 @@ export const userService = {
       throw new ResourceNotFound("User", id);
     }
 
+    Logger.debug(user);
     return user;
   },
   async getUserAutoSuggestion(
@@ -46,6 +46,8 @@ export const userService = {
     } catch (err: any) {
       throw new Error(err.message);
     }
+
+    Logger.debug(suggestsLimited);
     return suggestsLimited;
   },
   async createUser(userData: CreateUserRequestDto): Promise<void> {
@@ -70,9 +72,9 @@ export const userService = {
     }
 
     Logger.debug(createdUser);
+    return;
   },
   async updateUser(id: string, userData: CreateUserRequestDto): Promise<User> {
-    Logger.info(`Updating user with id = ${id}`);
     await userService.getUserById(id);
 
     const { error } = CreateUserRequestSchema.validate(userData);
@@ -92,12 +94,11 @@ export const userService = {
       throw new Error(err.message);
     }
 
-    // return user after update
     const updatedUser = userService.getUserById(id);
+    Logger.debug(updatedUser);
     return updatedUser;
   },
   async deleteUser(id: string) {
-    Logger.info(`Deleting user with id = ${id}`);
     await userService.getUserById(id);
 
     try {

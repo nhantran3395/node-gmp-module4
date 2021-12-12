@@ -19,6 +19,7 @@ export const userController = {
     next: NextFunction
   ) {
     const id = req.params.id;
+    Logger.info(`Finding user with id = ${id}`);
 
     try {
       const user = await getUserById(id);
@@ -34,10 +35,12 @@ export const userController = {
     next: NextFunction
   ) {
     const { loginQuery, limit } = req.query;
+    Logger.info(`Getting user auto suggestions`);
+    Logger.info(`loginQuery: ${loginQuery}`);
+    Logger.info(`limit: ${limit}`);
 
     try {
       const suggests = await getUserAutoSuggestion(loginQuery, limit);
-      Logger.info(suggests);
       res.json(suggests);
     } catch (error) {
       next(error);
@@ -49,9 +52,11 @@ export const userController = {
     next: NextFunction
   ) {
     const userData = req.body;
+    Logger.info(`Creating new user`);
+    Logger.info(userData);
 
     try {
-      const createdUser = await createUser(userData);
+      await createUser(userData);
       Logger.info(`Created user`);
       res.status(201).json({ message: API_MESSAGES.USER_CREATED_SUCCESS });
     } catch (error: any) {
@@ -65,6 +70,8 @@ export const userController = {
   ) {
     const id = req.params.id;
     const userData = req.body;
+    Logger.info(`Updating user with ${id}`);
+    Logger.info(userData);
 
     try {
       const user = await updateUser(id, userData);
@@ -80,6 +87,7 @@ export const userController = {
     next: NextFunction
   ) {
     const id = req.params.id;
+    Logger.info(`Removing user with ${id}`);
 
     try {
       await deleteUser(id);
