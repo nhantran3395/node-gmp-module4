@@ -7,7 +7,6 @@ import {
 } from "../exceptions";
 import { CreateUserRequestSchema } from "../validations";
 import { CreateUserRequestDto } from "../dtos";
-import { Logger } from "../logger";
 import { uuidValidator } from "../utils";
 
 export const userService = {
@@ -28,7 +27,6 @@ export const userService = {
       throw new ResourceNotFound("User", id);
     }
 
-    Logger.debug(user);
     return user;
   },
   async getUserAutoSuggestion(
@@ -46,7 +44,6 @@ export const userService = {
       throw new Error(err.message);
     }
 
-    Logger.debug(suggestsLimited);
     return suggestsLimited;
   },
   async createUser(userData: CreateUserRequestDto): Promise<void> {
@@ -58,10 +55,8 @@ export const userService = {
 
     const { login, password, age } = userData;
 
-    let createdUser: User | null;
-
     try {
-      createdUser = await User.create({ login, password, age });
+      await User.create({ login, password, age });
     } catch (err: any) {
       if (err instanceof UniqueConstraintError) {
         throw new ResourceDuplicated("User", "login");
@@ -70,7 +65,6 @@ export const userService = {
       throw new Error(err.message);
     }
 
-    Logger.debug(createdUser);
     return;
   },
   async updateUser(id: string, userData: CreateUserRequestDto): Promise<User> {
@@ -94,7 +88,6 @@ export const userService = {
     }
 
     const updatedUser = userService.getUserById(id);
-    Logger.debug(updatedUser);
     return updatedUser;
   },
   async deleteUser(id: string) {

@@ -5,7 +5,6 @@ import {
   InputInvalid,
   ResourceDuplicated,
 } from "../exceptions";
-import { Logger } from "../logger";
 import { uuidValidator } from "../utils";
 import { CreateGroupRequestDto, AddUsersToGroupRequestDto } from "../dtos";
 import {
@@ -57,7 +56,6 @@ export const groupService = {
       throw new ResourceNotFound("Group", id);
     }
 
-    Logger.debug(group);
     return group;
   },
   async getAllGroups(): Promise<Group[]> {
@@ -69,7 +67,6 @@ export const groupService = {
       throw new Error(err.message);
     }
 
-    Logger.debug(groups);
     return groups;
   },
   async createGroup(groupData: CreateGroupRequestDto): Promise<void> {
@@ -147,7 +144,6 @@ export const groupService = {
     }
 
     const updatedGroup = await groupService.getGroupById(id);
-    Logger.debug(updatedGroup);
     return updatedGroup;
   },
   async deleteGroup(id: string) {
