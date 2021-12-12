@@ -38,8 +38,6 @@ const findGroupOption: FindOptions = {
 
 export const groupService = {
   async getGroupById(id: string): Promise<Group> {
-    Logger.info(`Finding group with id = ${id}`);
-
     if (!uuidValidator(id)) {
       throw new InputInvalid("id must be in uuid format");
     }
@@ -59,6 +57,7 @@ export const groupService = {
       throw new ResourceNotFound("Group", id);
     }
 
+    Logger.debug(group);
     return group;
   },
   async getAllGroups(): Promise<Group[]> {
@@ -70,6 +69,7 @@ export const groupService = {
       throw new Error(err.message);
     }
 
+    Logger.debug(groups);
     return groups;
   },
   async createGroup(groupData: CreateGroupRequestDto): Promise<void> {
@@ -110,12 +110,12 @@ export const groupService = {
     }
 
     Logger.debug(createdGroup);
+    return;
   },
   async updateGroup(
     id: string,
     groupData: CreateGroupRequestDto
   ): Promise<Group> {
-    Logger.info(`Updating group with id = ${id}`);
     const group = await groupService.getGroupById(id);
 
     const { error } = CreateGroupRequestSchema.validate(groupData);
@@ -156,12 +156,11 @@ export const groupService = {
       throw new Error(err.message);
     }
 
-    // return group after update
     const updatedGroup = await groupService.getGroupById(id);
+    Logger.debug(updatedGroup);
     return updatedGroup;
   },
   async deleteGroup(id: string) {
-    Logger.info(`Deleting group with id = ${id}`);
     await groupService.getGroupById(id);
 
     try {

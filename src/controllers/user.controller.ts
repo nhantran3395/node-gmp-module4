@@ -23,7 +23,7 @@ export const userController = {
 
     try {
       const user = await getUserById(id);
-      Logger.info(`Retrieved info for user with id = ${user.id}`);
+      Logger.info(`Found user with id = ${user.id}`);
       res.json(user);
     } catch (error: any) {
       next(error);
@@ -70,7 +70,7 @@ export const userController = {
   ) {
     const id = req.params.id;
     const userData = req.body;
-    Logger.info(`Updating user with ${id}`);
+    Logger.info(`Updating user with id = ${id}`);
     Logger.info(userData);
 
     try {
@@ -91,7 +91,7 @@ export const userController = {
 
     try {
       await deleteUser(id);
-      Logger.info(`Deleted user with id = ${id}`);
+      Logger.info(`Removed user with id = ${id}`);
       res.json({ message: API_MESSAGES.USER_DELETED_SUCCESS });
     } catch (error: any) {
       next(error);

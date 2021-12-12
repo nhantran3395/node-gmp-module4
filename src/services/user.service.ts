@@ -20,7 +20,6 @@ export const userService = {
 
     try {
       user = await User.findOne({ where: { id: id } });
-      Logger.info(`Found user with id = ${id}`);
     } catch (err: any) {
       throw new Error(err.message);
     }

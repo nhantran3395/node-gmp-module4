@@ -21,10 +21,11 @@ export const groupController = {
     next: NextFunction
   ) {
     const id = req.params.id;
+    Logger.info(`Finding group with id = ${id}`);
 
     try {
       const group = await getGroupById(id);
-      Logger.info(`Retrieved info for group with id = ${group.id}`);
+      Logger.info(`Found group with id = ${group.id}`);
       res.json(group);
     } catch (error: any) {
       next(error);
@@ -35,9 +36,10 @@ export const groupController = {
     res: Response,
     next: NextFunction
   ) {
+    Logger.info(`Finding all groups`);
+
     try {
       const groups = await getAllGroups();
-      Logger.info(groups);
       res.json(groups);
     } catch (error) {
       next(error);
@@ -49,6 +51,8 @@ export const groupController = {
     next: NextFunction
   ) {
     const groupData = req.body;
+    Logger.info(`Creating new group`);
+    Logger.info(groupData);
 
     try {
       await createGroup(groupData);
@@ -65,6 +69,8 @@ export const groupController = {
   ) {
     const id = req.params.id;
     const groupData = req.body;
+    Logger.info(`Updating group with id = ${id}`);
+    Logger.info(groupData);
 
     try {
       const group = await updateGroup(id, groupData);
@@ -80,10 +86,11 @@ export const groupController = {
     next: NextFunction
   ) {
     const id = req.params.id;
+    Logger.info(`Removing group with id = ${id}`);
 
     try {
       await deleteGroup(id);
-      Logger.info(`Deleted group with id = ${id}`);
+      Logger.info(`Removed group with id = ${id}`);
       res.json({ message: API_MESSAGES.GROUP_DELETED_SUCCESS });
     } catch (error: any) {
       next(error);
@@ -95,10 +102,11 @@ export const groupController = {
     next: NextFunction
   ) {
     const data = req.body;
+    Logger.info(`Adding users to group`);
+    Logger.info(data);
 
     try {
       await addUsersToGroup(data);
-      Logger.info(data);
       res.json({ message: API_MESSAGES.USERS_ADDED_TO_GROUP_SUCCESS });
     } catch (error: any) {
       next(error);
