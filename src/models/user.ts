@@ -1,6 +1,6 @@
-import { Sequelize, Model, DataTypes } from "sequelize";
+import { Model, DataTypes } from "sequelize";
 import { v4 as uuidv4 } from "uuid";
-import { sequelize } from "../configs/sequelize.config";
+import { sequelize } from "../configs";
 
 class User extends Model {
   public id!: string;
