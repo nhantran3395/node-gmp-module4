@@ -13,7 +13,7 @@ import {
   AddUsersToGroupSchema,
 } from "../validations";
 import { sequelize } from "../configs";
-import { userService } from "../services";
+import { userService, permissionService } from "../services";
 
 const findGroupOption: FindOptions = {
   include: [
@@ -81,26 +81,25 @@ export const groupService = {
 
     const { name: groupName, permissions: permissionNames } = groupData;
 
+    const permissions = await Promise.all(
+      permissionNames.map(async (name) =>
+        permissionService.getPermissionByName(name)
+      )
+    );
+
     let createdGroup: Group | null;
 
     try {
-      createdGroup = await Group.create({ name: groupName });
+      await sequelize.transaction(async (transaction: Transaction) => {
+        createdGroup = await Group.create({
+          name: groupName,
+          transaction: transaction,
+        });
 
-      const permissions = await Promise.all(
-        permissionNames.map(async (permissionName) => {
-          const permission = await Permission.findOne({
-            where: { name: permissionName },
-          });
-
-          if (!permission) {
-            throw new Error();
-          }
-
-          return permission;
-        })
-      );
-
-      createdGroup.addPermissions(permissions);
+        await createdGroup.addPermissions(permissions, {
+          transaction: transaction,
+        });
+      });
     } catch (err: any) {
       if (err instanceof UniqueConstraintError) {
         throw new ResourceDuplicated("Group", "name");
@@ -109,7 +108,6 @@ export const groupService = {
       throw new Error(err.message);
     }
 
-    Logger.debug(createdGroup);
     return;
   },
   async updateGroup(
