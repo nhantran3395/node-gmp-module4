@@ -125,17 +125,9 @@ export const groupService = {
     const { name: groupName, permissions: permissionNames } = groupData;
 
     const permissions = await Promise.all(
-      permissionNames.map(async (permissionName) => {
-        const permission = await Permission.findOne({
-          where: { name: permissionName },
-        });
-
-        if (!permission) {
-          throw new Error();
-        }
-
-        return permission;
-      })
+      permissionNames.map(async (name) =>
+        permissionService.getPermissionByName(name)
+      )
     );
 
     try {
