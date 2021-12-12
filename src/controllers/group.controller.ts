@@ -3,12 +3,13 @@ import { groupService } from "../services";
 import { Logger } from "../logger";
 import { CreateGroupRequestDto } from "../dtos";
 import { API_MESSAGES } from "../shared/messages";
-import { AddUsersToGroupDto } from "../dtos/add-users-to-group-request.dto";
+import { AddUsersToGroupRequestDto } from "../dtos/add-users-to-group-request.dto";
 
 const {
   getGroupById,
   getAllGroups,
   createGroup,
+  updateGroup,
   deleteGroup,
   addUsersToGroup,
 } = groupService;
@@ -57,6 +58,22 @@ export const groupController = {
       next(error);
     }
   },
+  async updateGroup(
+    req: Request<{ id: string }, {}, CreateGroupRequestDto>,
+    res: Response,
+    next: NextFunction
+  ) {
+    const id = req.params.id;
+    const groupData = req.body;
+
+    try {
+      const group = await updateGroup(id, groupData);
+      Logger.info(`Updated group with id = ${id}`);
+      res.json(group);
+    } catch (error: any) {
+      next(error);
+    }
+  },
   async deleteGroup(
     req: Request<{ id: string }>,
     res: Response,
@@ -73,7 +90,7 @@ export const groupController = {
     }
   },
   async addUsersToGroup(
-    req: Request<{}, {}, AddUsersToGroupDto, {}>,
+    req: Request<{}, {}, AddUsersToGroupRequestDto, {}>,
     res: Response,
     next: NextFunction
   ) {
@@ -82,7 +99,7 @@ export const groupController = {
     try {
       await addUsersToGroup(data);
       Logger.info(data);
-      res.json({ message: API_MESSAGES.GROUP_DELETED_SUCCESS });
+      res.json({ message: API_MESSAGES.USERS_ADDED_TO_GROUP_SUCCESS });
     } catch (error: any) {
       next(error);
     }

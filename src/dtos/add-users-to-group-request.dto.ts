@@ -1,4 +1,4 @@
-export interface AddUsersToGroupDto {
+export interface AddUsersToGroupRequestDto {
   groupId: string;
   userIds: string[];
 }

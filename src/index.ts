@@ -1,6 +1,6 @@
 import express, { NextFunction } from "express";
 import "./configs/dotenv.config";
-import { sequelize } from "./configs/sequelize.config";
+import { sequelize } from "./configs";
 import { userRouter, groupRouter } from "./routes";
 import { Logger } from "./logger";
 import {
@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(morganMiddleware);
 
 app.get("/", function (req, res) {
-  res.json({ message: "module 3 application is running" });
+  res.json({ message: "module 4 application is running" });
 });
 
 app.get("/databaseconnection", async function (req, res, next: NextFunction) {

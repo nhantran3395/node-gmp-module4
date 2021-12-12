@@ -7,14 +7,13 @@ import {
 } from "../exceptions";
 import { Logger } from "../logger";
 import { uuidValidator } from "../utils";
-import { CreateGroupRequestDto } from "../dtos";
+import { CreateGroupRequestDto, AddUsersToGroupRequestDto } from "../dtos";
 import {
   CreateGroupRequestSchema,
   AddUsersToGroupSchema,
 } from "../validations";
-import { sequelize } from "../configs/sequelize.config";
-import { AddUsersToGroupDto } from "../dtos/add-users-to-group-request.dto";
-import { userService } from "./user.service";
+import { sequelize } from "../configs";
+import { userService } from "../services";
 
 const findGroupOption: FindOptions = {
   include: [
@@ -112,8 +111,57 @@ export const groupService = {
 
     Logger.debug(createdGroup);
   },
+  async updateGroup(
+    id: string,
+    groupData: CreateGroupRequestDto
+  ): Promise<Group> {
+    Logger.info(`Updating group with id = ${id}`);
+    const group = await groupService.getGroupById(id);
+
+    const { error } = CreateGroupRequestSchema.validate(groupData);
+
+    if (error) {
+      throw new InputInvalid(error.message);
+    }
+
+    const { name: groupName, permissions: permissionNames } = groupData;
+
+    const permissions = await Promise.all(
+      permissionNames.map(async (permissionName) => {
+        const permission = await Permission.findOne({
+          where: { name: permissionName },
+        });
+
+        if (!permission) {
+          throw new Error();
+        }
+
+        return permission;
+      })
+    );
+
+    try {
+      await sequelize.transaction(async (transaction: Transaction) => {
+        await Group.update(
+          { name: groupName, updatedAt: new Date() },
+          { where: { id: id }, transaction: transaction }
+        );
+        await GroupPermission.destroy({
+          where: { groupId: id },
+          transaction: transaction,
+        });
+        await group.addPermissions(permissions, { transaction: transaction });
+      });
+    } catch (err: any) {
+      throw new Error(err.message);
+    }
+
+    // return group after update
+    const updatedGroup = await groupService.getGroupById(id);
+    return updatedGroup;
+  },
   async deleteGroup(id: string) {
-    Logger.info(`Deleting user with id = ${id}`);
+    Logger.info(`Deleting group with id = ${id}`);
     await groupService.getGroupById(id);
 
     try {
@@ -132,7 +180,7 @@ export const groupService = {
       throw new Error(err.message);
     }
   },
-  async addUsersToGroup(data: AddUsersToGroupDto) {
+  async addUsersToGroup(data: AddUsersToGroupRequestDto) {
     const { error } = AddUsersToGroupSchema.validate(data);
 
     if (error) {
