@@ -9,7 +9,7 @@ const errorHandlingMiddleware = (
   res: Response,
   next: NextFunction
 ) => {
-  Logger.error(err);
+  Logger.error(err.stack);
 
   if (err instanceof ApiError) {
     return res.status(err.code).json({ message: err.message });
