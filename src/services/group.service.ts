@@ -175,11 +175,14 @@ export const groupService = {
     const { groupId, userIds } = data;
     const group = await groupService.getGroupById(groupId);
 
+    const users = await Promise.all(
+      userIds.map(async (userId) => await userService.getUserById(userId))
+    );
+
     try {
-      const users = await Promise.all(
-        userIds.map(async (userId) => await userService.getUserById(userId))
-      );
-      group.addUsers(users);
+      await sequelize.transaction(async (transaction: Transaction) => {
+        await group.addUsers(users, { transaction: transaction });
+      });
     } catch (err: any) {
       throw new Error(err.message);
     }
